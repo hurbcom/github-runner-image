@@ -5,9 +5,6 @@ on:
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*.**' # Push events to matching v*, i.e. v1.0, v20.15.10
-# on:
-#  release:
-#    types: [published]
 
 jobs:
   docker:
@@ -25,7 +22,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          image: lsilvatux/github-runner-image
-          tag: ${{ github.ref }}
+          tags: lsilvatux/github-runner-image:${{ github.ref }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
