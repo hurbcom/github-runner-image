@@ -22,6 +22,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: lsilvatux/github-runner-image:${{ github.ref }}
+          tags: lsilvatux/github-runner-image:${{ github.ref#refs/*/ }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
