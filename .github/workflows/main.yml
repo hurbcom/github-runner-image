@@ -4,8 +4,6 @@ on:
   push:
     tags:
     - 'v*'
-    paths-ignore:
-    - '.github*'
 jobs:
   docker:
     runs-on: ubuntu-latest
