@@ -2,11 +2,9 @@ name: Build and push image
 
 on:
   push:
-    branches:
-      - main
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*.**' # Push events to matching v*, i.e. v1.0, v20.15.10
 # on:
 #  release:
 #    types: [published]
