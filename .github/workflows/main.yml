@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     tags:
-    - v*
+    - 'v*'
     paths-ignore:
     - '.github*'
 jobs:
@@ -21,6 +21,6 @@ jobs:
         with:
           push: true
           image: lsilvatux/github-runner-image
-      -
-        name: Image digest
+          tag: ${{ github.ref }}
+      - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
