@@ -1,5 +1,5 @@
 #!/bin/bash
 
-/actions-runner/config.sh --unattended --labels ${LABELS} --name github-runner-${HOSTNAME} --url "${URL}" --token "${TOKEN}"
+/actions-runner/config.sh --unattended --labels ${LABELS} --name ${HOSTNAME} --url "${URL}" --token "${TOKEN}"
 
 exec $@
