@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runners
+  labels:
+    app: runner
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: runner
+  template:
+    metadata:
+      labels:
+        app: runner
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: github-runner
+        image: lsilvatux/github-runner-image
+        imagePullPolicy: Always
+        env:
+        - name: LABELS
+          value: << Labels here >>
+        - name: ORG
+          value: <<you org here>>
+        - name: GITHUB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-access-token
+              key: personal.token
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","./remove.sh"]
