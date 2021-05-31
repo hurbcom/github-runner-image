@@ -3,7 +3,7 @@ ARG VERSION=2.278.0
 RUN export DEBIAN_FRONTEND=noninteractive && apt update && apt -y install supervisor curl jq wget liblttng-ust0 libkrb5-3 zlib1g libssl1.1 libicu66 apt-transport-https && apt clean
 RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
     dpkg -i packages-microsoft-prod.deb;\
-    apt update && apt install -y dotnet-runtime-5.0
+    apt update && apt install -y dotnet-runtime-5.0 git
 RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner 
 WORKDIR /actions-runner
 USER github-runner
