@@ -17,4 +17,4 @@ Create a secret with your Github personal Token:
 
 `kubectl create secret generic github-access-token --from-literal=personal.token='<<your token here>>'`
 
-
+To be continued
