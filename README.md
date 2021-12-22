@@ -17,4 +17,20 @@ Create a secret with your Github personal Token:
 
 `kubectl create secret generic github-access-token --from-literal=personal.token='<<your token here>>'`
 
-To be continued
+Check if the secret was created:
+
+`kubectl get secrets`
+
+After this you need create a deployment with the runners. To do this, change the file `deployment.yaml` with the Labels and your organizations name. You can decrease or increase the number of replicas (the default is 6). P.S.: You need have a organization account to use this image. It's not supported for standalone accounts.
+
+After changes you can deploy with the command:
+
+`kubectl apply -f deployment.yaml`
+
+Now you can see your runners on gihub dashboard:
+
+![Runners image](img/runners.png "Runners")
+
+## Related Open Source Projects
+
+If you wish auto scale runners take a look in https://github.com/hurbcom/github-runner-autoscale
