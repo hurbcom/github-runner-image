@@ -1,0 +1,15 @@
+apt-transport-https
+bc
+curl
+git
+jq
+libicu66
+libkrb5-3
+liblttng-ust0
+libssl1.1
+lsb-release
+sudo
+supervisor
+systemctl
+wget
+zlib1g
