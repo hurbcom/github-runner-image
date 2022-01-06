@@ -36,6 +36,5 @@ COPY --chown=github-runner remove.sh /actions-runner/
 ADD scripts/fake_invoke_tests.sh /tmp/invoke_tests.sh
 ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
-RUN /tmp/ubuntu20.sh
-#RUN rm /tmp/ubuntu20.sh
+RUN /tmp/ubuntu20.sh && RUN rm /tmp/ubuntu20.sh || /bin/true
 
