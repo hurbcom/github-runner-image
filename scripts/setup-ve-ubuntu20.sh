@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+ENABLED_PACKAGES=${1:-all}
 export VE_UBUNTU_TAG=${VE_UBUNTU_TAG:-20211219.1}
 export DEBIAN_FRONTEND=noninteractive
 
@@ -15,8 +16,33 @@ export IMAGE_OS=ubuntu20
 
 . /tmp/invoke_tests.sh
 
+function should_be_installed {
+    NAME="$1"
+
+    # No name was defined, skip check
+    if [ -z "$NAME" ]; then
+        return 0
+
+    # Install all packages
+    elif [[ "$ENABLED_PACKAGES" == "all" ]]; then
+        return 0
+
+    # Check if package is enabled to install
+    elif [[ " $ENABLED_PACKAGES " == *"$NAME"* ]]; then
+        return 0
+
+    fi
+
+    # Abort
+    return 1
+}
+
 function run {
-    NAME=$2
+    if ! should_be_installed $2; then
+        echo "--- Skipping $1 because it is not enabled for installation"
+        return 0
+    fi
+
     echo "--- Running $1"
     if [ ! -f "$1" ]; then
         return 0
@@ -25,6 +51,11 @@ function run {
 }
 
 function run_ps {
+    if ! should_be_installed $2; then
+        echo "--- Skipping $1 because it is not enabled for installation"
+        return 0
+    fi
+
     echo "--- Running PowerShell $1"
     if [ ! -f "$1" ]; then
         return 0
@@ -43,11 +74,14 @@ run ${BASE_DIR}/scripts/installers/configure-environment.sh
 run ${BASE_DIR}/scripts/installers/complete-snap-setup.sh
 
 ## base
+ln -s ${BASE_DIR}/toolsets/toolset-2004.json ${BASE_DIR}/scripts/installers/toolset.json
+[ -d /imagegeneration/installers ] || mkdir -p /imagegeneration/installers
+
 run ${BASE_DIR}/scripts/installers/powershellcore.sh
-run_ps ${BASE_DIR}/scripts/installers/Install-PowerShellModules.ps1
-run_ps ${BASE_DIR}/scripts/installers/Install-AzureModules.ps1
-run ${BASE_DIR}/scripts/installers/docker-compose.sh
-run ${BASE_DIR}/scripts/installers/docker-moby.sh
+run_ps ${BASE_DIR}/scripts/installers/Install-PowerShellModules.ps1 powershell-modules
+run_ps ${BASE_DIR}/scripts/installers/Install-AzureModules.ps1 azure-modules
+#run ${BASE_DIR}/scripts/installers/docker-compose.sh 
+#run ${BASE_DIR}/scripts/installers/docker-moby.sh
 
 ## tools
 run ${BASE_DIR}/scripts/installers/azcopy.sh azcopy
@@ -63,7 +97,7 @@ run ${BASE_DIR}/scripts/installers/swift.sh swift
 run ${BASE_DIR}/scripts/installers/cmake.sh cmake
 run ${BASE_DIR}/scripts/installers/codeql-bundle.sh codeql
 run ${BASE_DIR}/scripts/installers/containers.sh containers
-run ${BASE_DIR}/scripts/installers/dotnetcore-sdk.sh dotnetcore
+run ${BASE_DIR}/scripts/installers/dotnetcore-sdk.sh # needed for runner
 run ${BASE_DIR}/scripts/installers/erlang.sh erlang
 run ${BASE_DIR}/scripts/installers/firefox.sh firegox
 run ${BASE_DIR}/scripts/installers/gcc.sh gcc
@@ -122,3 +156,5 @@ run ${BASE_DIR}/scripts/installers/cleanup.sh
 run ${BASE_DIR}/scripts/base/apt-mock-remove.sh
 run ${BASE_DIR}/scripts/base/snap.sh
 run ${BASE_DIR}/scripts/installers/post-deployment.sh
+
+sudo apt --fix-broken install 

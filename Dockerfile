@@ -1,6 +1,7 @@
 FROM ubuntu:20.04
 ARG VERSION=2.278.0
-ENV VE_UBUNTU_TAG=20211219.1
+ARG VE_UBUNTU_TAG=20211219.1
+ARG PACKAGES=all
 
 ENTRYPOINT ["./start.sh"]
 CMD ["/usr/bin/supervisord"]
@@ -8,7 +9,7 @@ CMD ["/usr/bin/supervisord"]
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
-    apt -y install `cat /tmp/requirements.apt` && \
+    apt -f -y install `cat /tmp/requirements.apt` && \
     rm /tmp/requirements.apt
 
 # RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
@@ -36,5 +37,5 @@ COPY --chown=github-runner remove.sh /actions-runner/
 ADD scripts/fake_invoke_tests.sh /tmp/invoke_tests.sh
 ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
-RUN /tmp/ubuntu20.sh && RUN rm /tmp/ubuntu20.sh || /bin/true
+RUN /tmp/ubuntu20.sh "${PACKAGES}"
 
