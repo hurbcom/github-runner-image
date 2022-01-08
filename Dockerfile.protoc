@@ -1,5 +1,7 @@
 FROM namely/protoc-all AS base
 ARG VERSION=2.278.0
+ENV GO_VERSION=1.16
+ENV PATH="/usr/local/go/bin:${PATH}"
 
 ENTRYPOINT ["./start.sh"]
 CMD ["/usr/bin/supervisord"]
@@ -11,17 +13,22 @@ WORKDIR /actions-runnergit
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
-    apt -f -y install `cat /tmp/requirements.apt` && \
+    apt -f -y install `cat /tmp/requirements.apt | grep libicu66 -v | grep systemctl -v` && \
     rm /tmp/requirements.apt
 
 RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
     dpkg -i packages-microsoft-prod.deb;\
     apt update && apt install -y dotnet-runtime-5.0 && apt autoclean
 
-
 RUN  curl -O -L https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz ;\
     tar xzf actions-runner-linux-x64-${VERSION}.tar.gz ;\
     rm actions-runner-linux-x64-${VERSION}.tar.gz
+
+RUN curl -o /tmp/go.tgz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
+    && rm -rf /usr/local/go \
+    && tar -C /usr/local -xzf /tmp/go.tgz \
+    && mkdir -m 777 /go \
+    && true
 
 ADD supervisord.conf /etc/supervisor/
 COPY --chown=github-runner start.sh /actions-runner/
