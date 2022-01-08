@@ -2,7 +2,6 @@ apt-transport-https
 build-essential
 bc
 curl
-docker
 git
 jq
 libicu66
