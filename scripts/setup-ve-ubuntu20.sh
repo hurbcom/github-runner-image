@@ -39,11 +39,11 @@ function should_be_installed {
 
 function run {
     if ! should_be_installed $2; then
-        echo "--- Skipping $1 because it is not enabled for installation"
+        echo "--- Skipping ${1##*/} because it is not enabled for installation"
         return 0
     fi
 
-    echo "--- Running $1"
+    echo "--- Running ${1##*/}"
     if [ ! -f "$1" ]; then
         return 0
     fi
@@ -52,11 +52,11 @@ function run {
 
 function run_ps {
     if ! should_be_installed $2; then
-        echo "--- Skipping $1 because it is not enabled for installation"
+        echo "--- Skipping ${1##*/} because it is not enabled for installation"
         return 0
     fi
 
-    echo "--- Running PowerShell $1"
+    echo "--- Running PowerShell ${1##*/}"
     if [ ! -f "$1" ]; then
         return 0
     fi
@@ -77,11 +77,11 @@ run ${BASE_DIR}/scripts/installers/complete-snap-setup.sh
 ln -s ${BASE_DIR}/toolsets/toolset-2004.json ${BASE_DIR}/scripts/installers/toolset.json
 [ -d /imagegeneration/installers ] || mkdir -p /imagegeneration/installers
 
-run ${BASE_DIR}/scripts/installers/powershellcore.sh
+run ${BASE_DIR}/scripts/installers/powershellcore.sh powershell
 run_ps ${BASE_DIR}/scripts/installers/Install-PowerShellModules.ps1 powershell-modules
 run_ps ${BASE_DIR}/scripts/installers/Install-AzureModules.ps1 azure-modules
-#run ${BASE_DIR}/scripts/installers/docker-compose.sh 
-#run ${BASE_DIR}/scripts/installers/docker-moby.sh
+run ${BASE_DIR}/scripts/installers/docker-compose.sh docker
+run ${BASE_DIR}/scripts/installers/docker-moby.sh docker
 
 ## tools
 run ${BASE_DIR}/scripts/installers/azcopy.sh azcopy
@@ -146,10 +146,10 @@ run ${BASE_DIR}/scripts/installers/python.sh python
 run ${BASE_DIR}/scripts/installers/graalvm.sh graal
 
 ## 3rd party
-run_ps ${BASE_DIR}/scripts/installers/Install-Toolset.ps1
-run_ps ${BASE_DIR}/scripts/installers/Configure-Toolset.ps1
-run ${BASE_DIR}/scripts/installers/pipx-packages.sh
-run ${BASE_DIR}/scripts/installers/homebrew.sh
+run_ps ${BASE_DIR}/scripts/installers/Install-Toolset.ps1 toolset 
+run_ps ${BASE_DIR}/scripts/installers/Configure-Toolset.ps1 toolset
+run ${BASE_DIR}/scripts/installers/pipx-packages.sh pipx
+run ${BASE_DIR}/scripts/installers/homebrew.sh homebrew
 
 ## clean up
 run ${BASE_DIR}/scripts/installers/cleanup.sh
