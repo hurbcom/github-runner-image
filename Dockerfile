@@ -4,8 +4,10 @@ ARG VE_UBUNTU_TAG=20211219.1
 ARG PACKAGES=none
 
 
+WORKDIR /actions-runner
 ENTRYPOINT ["./start.sh"]
 CMD ["/usr/bin/supervisord"]
+
 
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
@@ -18,8 +20,7 @@ RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runn
 #RUN echo 'github-runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner
 
 
-WORKDIR /actions-runner
-USER github-runner
+
 RUN  curl -O -L https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz ;\
     tar xzf actions-runner-linux-x64-${VERSION}.tar.gz ;\
     rm actions-runner-linux-x64-${VERSION}.tar.gz
@@ -34,3 +35,4 @@ ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
 RUN /tmp/ubuntu20.sh "${PACKAGES}"
 
+USER github-runner
