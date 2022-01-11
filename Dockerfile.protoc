@@ -3,13 +3,6 @@ ARG VERSION=2.278.0
 ENV GO_VERSION=1.16
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-ENTRYPOINT ["./start.sh"]
-CMD ["/usr/bin/supervisord"]
-
-RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
-    usermod -aG sudo github-runner
-WORKDIR /actions-runner
-
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
@@ -30,9 +23,14 @@ RUN curl -o /tmp/go.tgz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar
     && mkdir -m 777 /go \
     && true
 
+RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
+    usermod -aG sudo github-runner
+WORKDIR /actions-runner
+USER github-runner
+
 ADD supervisord.conf /etc/supervisor/
 COPY --chown=github-runner start.sh /actions-runner/
 COPY --chown=github-runner remove.sh /actions-runner/
 
-USER github-runner
-
+ENTRYPOINT ["./start.sh"]
+CMD ["/usr/bin/supervisord"]
