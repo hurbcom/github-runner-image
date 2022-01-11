@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runners-protoc
+  labels:
+    app: runner-protoc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: runner-protoc
+  template:
+    metadata:
+      labels:
+        app: runner-protoc
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: github-runner-protoc
+        image: hurb/github-runner-image-protoc
+        imagePullPolicy: Always
+        env:
+        - name: LABELS
+          value: << Labels here >>
+        - name: ORG
+          value: <<you org here>>
+        - name: GITHUB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-access-token
+              key: personal.token
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","./remove.sh"]
