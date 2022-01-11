@@ -37,4 +37,3 @@ COPY --chown=github-runner remove.sh /actions-runner/
 # ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
 # RUN /tmp/ubuntu20.sh "${PACKAGES}"
-
