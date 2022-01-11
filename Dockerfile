@@ -1,11 +1,13 @@
 FROM ubuntu:20.04
 ARG VERSION=2.278.0
 ARG VE_UBUNTU_TAG=20211219.1
-ARG PACKAGES=all
+ARG PACKAGES=none
 
 
+WORKDIR /actions-runner
 ENTRYPOINT ["./start.sh"]
 CMD ["/usr/bin/supervisord"]
+
 
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
@@ -15,13 +17,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 
 RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
     usermod -aG sudo github-runner
-# New user can sudo without password, for setup-php@v2
-RUN echo 'github-runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner
-#RUN echo 'github-runner ALL=(ALL) NOPASSWD:/usr/bin/rm, /usr/bin/ln, /usr/bin/sed, /usr/bin/find, /usr/bin/tee, /usr/bin/apt-cache, /usr/bin/chmod, /usr/bin/update-alternatives, /usr/bin/mkdir, /usr/bin/cp, /usr/bin/apt-fast' >>  /etc/sudoers.d/runner
+#RUN echo 'github-runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner
 
 
-WORKDIR /actions-runner
-USER github-runner
+
 RUN  curl -O -L https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz ;\
     tar xzf actions-runner-linux-x64-${VERSION}.tar.gz ;\
     rm actions-runner-linux-x64-${VERSION}.tar.gz
@@ -36,3 +35,4 @@ ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
 RUN /tmp/ubuntu20.sh "${PACKAGES}"
 
+USER github-runner
