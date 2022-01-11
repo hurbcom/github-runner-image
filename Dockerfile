@@ -13,10 +13,11 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt -f -y install `cat /tmp/requirements.apt` && \
     rm /tmp/requirements.apt
 
-RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
-    usermod -aG sudo github-runner
+RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner 
+#    usermod -aG sudo github-runner
 # New user can sudo without password, for setup-php@v2
-RUN echo 'github-runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner
+# Disabling this because we will use on another image
+# RUN echo 'github-runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/runner
 #RUN echo 'github-runner ALL=(ALL) NOPASSWD:/usr/bin/rm, /usr/bin/ln, /usr/bin/sed, /usr/bin/find, /usr/bin/tee, /usr/bin/apt-cache, /usr/bin/chmod, /usr/bin/update-alternatives, /usr/bin/mkdir, /usr/bin/cp, /usr/bin/apt-fast' >>  /etc/sudoers.d/runner
 
 
@@ -30,9 +31,10 @@ ADD supervisord.conf /etc/supervisor/
 COPY --chown=github-runner start.sh /actions-runner/
 COPY --chown=github-runner remove.sh /actions-runner/
 
+# Comment this because this will be used in another image
 # Install github environment for ubuntu-20.04
-ADD scripts/fake_invoke_tests.sh /tmp/invoke_tests.sh
-ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
+# ADD scripts/fake_invoke_tests.sh /tmp/invoke_tests.sh
+# ADD scripts/setup-ve-ubuntu20.sh /tmp/ubuntu20.sh
 
-RUN /tmp/ubuntu20.sh "${PACKAGES}"
+# RUN /tmp/ubuntu20.sh "${PACKAGES}"
 
