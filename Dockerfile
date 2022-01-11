@@ -8,7 +8,6 @@ WORKDIR /actions-runner
 ENTRYPOINT ["./start.sh"]
 CMD ["/usr/bin/supervisord"]
 
-
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \

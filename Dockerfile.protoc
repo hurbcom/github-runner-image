@@ -8,7 +8,7 @@ CMD ["/usr/bin/supervisord"]
 
 RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
     usermod -aG sudo github-runner
-WORKDIR /actions-runnergit
+WORKDIR /actions-runner
 
 COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
