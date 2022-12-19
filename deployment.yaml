@@ -29,6 +29,13 @@ spec:
             secretKeyRef:
               name: github-access-token
               key: personal.token
+        resources:
+          limits:
+            cpu: 500m
+            memory: 4Gi
+          requests:
+            cpu: 250m
+            memory: 2Gi          
         lifecycle:
           preStop:
             exec:
