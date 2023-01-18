@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-ARG VERSION=2.292.0
+ARG VERSION=v2.300.2
 ARG VE_UBUNTU_TAG=20211219.1
 ENV GITHUB_ACCESS_TOKEN=
 ENV LABELS=
@@ -17,7 +17,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
     apt update && apt install -y dotnet-runtime-5.0
 
 RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
-    usermod -aG sudo github-runner
+    usermod -aG sudo github-runner && echo "github-runner ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 WORKDIR /actions-runner
 USER github-runner
