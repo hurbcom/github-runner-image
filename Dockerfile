@@ -17,7 +17,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
     apt update && apt install -y dotnet-runtime-5.0
 
 RUN adduser -q --disabled-password --gecos "" --home /actions-runner github-runner ; \
-    usermod -aG sudo github-runner
+    usermod -aG sudo github-runner && echo "github-runner ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 WORKDIR /actions-runner
 USER github-runner
