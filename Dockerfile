@@ -1,6 +1,6 @@
-FROM ubuntu:20.04
-ARG VERSION=2.300.2
-ARG VE_UBUNTU_TAG=20211219.1
+FROM ubuntu:22.04
+ARG VERSION=2.304.0
+ARG VE_UBUNTU_TAG=20230425.1
 ENV GITHUB_ACCESS_TOKEN=
 ENV LABELS=
 ENV HOSTNAME=
@@ -10,7 +10,8 @@ COPY requirements.apt /tmp
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt update && \
     apt -f -y install `cat /tmp/requirements.apt` && \
-    rm /tmp/requirements.apt
+    rm /tmp/requirements.apt && \
+    curl -sSL https://get.docker.com/ | sh
 
 RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
     dpkg -i packages-microsoft-prod.deb;\

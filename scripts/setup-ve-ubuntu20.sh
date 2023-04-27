@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 ENABLED_PACKAGES=${1:-all}
-export VE_UBUNTU_TAG=${VE_UBUNTU_TAG:-20211219.1}
+export VE_UBUNTU_TAG=${VE_UBUNTU_TAG:-20230425.1}
 export DEBIAN_FRONTEND=noninteractive
 
 # Download virtual environment ubuntu 20
-wget https://github.com/actions/virtual-environments/archive/refs/tags/ubuntu20/${VE_UBUNTU_TAG}.tar.gz -O - | tar zx
-cd virtual-environments-ubuntu20*/
+wget https://github.com/actions/virtual-environments/archive/refs/tags/ubuntu22/${VE_UBUNTU_TAG}.tar.gz -O - | tar zx
+cd virtual-environments-ubuntu22*/
 
 # Set some variables
 export BASE_DIR=$(pwd)/images/linux
 export HELPER_SCRIPTS=${BASE_DIR}/scripts/helpers
 export INSTALLER_SCRIPT_FOLDER=${BASE_DIR}/scripts/installers
-export IMAGE_OS=ubuntu20
+export IMAGE_OS=ubuntu22
 
 . /tmp/invoke_tests.sh
 
