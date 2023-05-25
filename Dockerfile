@@ -31,6 +31,7 @@ ADD supervisord.conf /etc/supervisor/
 COPY --chown=github-runner start.sh /actions-runner/
 COPY --chown=github-runner remove.sh /actions-runner/
 COPY --chown=github-runner finish.sh /actions-runner/
+COPY --chown=github-runner afterjob.sh /actions-runner/
 COPY --chown=github-runner .env /actions-runner/
 
 ENTRYPOINT ["./start.sh"]
