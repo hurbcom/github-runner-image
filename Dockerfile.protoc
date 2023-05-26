@@ -1,5 +1,5 @@
 FROM namely/protoc-all AS base
-ARG VERSION=2.278.0
+ARG VERSION=2.304.0
 ENV GO_VERSION=1.16
 ENV PATH="/usr/local/go/bin:${PATH}"
 
