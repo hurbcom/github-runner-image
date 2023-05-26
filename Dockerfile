@@ -35,4 +35,4 @@ COPY --chown=github-runner remove.sh /actions-runner/
 #COPY --chown=github-runner .env /actions-runner/
 
 ENTRYPOINT ["./start.sh"]
-CMD ["/usr/bin/supervisord"]
+#CMD ["/usr/bin/supervisord"]
