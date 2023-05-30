@@ -12,7 +12,6 @@ lsb-release
 parallel
 python3-wheel
 sudo
-supervisor
 systemctl
 unzip
 wget

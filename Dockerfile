@@ -27,7 +27,7 @@ USER github-runner
 RUN  curl -O -L https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz ; \
     tar xzf actions-runner-linux-x64-${VERSION}.tar.gz; \
     rm actions-runner-linux-x64-${VERSION}.tar.gz
-#ADD supervisord.conf /etc/supervisor/
+
 COPY --chown=github-runner start.sh /actions-runner/
 COPY --chown=github-runner remove.sh /actions-runner/
 

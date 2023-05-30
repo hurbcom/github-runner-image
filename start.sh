@@ -5,4 +5,3 @@ TOKEN=$(curl  -X POST 2>/dev/null  -H "Authorization: token ${GITHUB_ACCESS_TOKE
 /actions-runner/config.sh --unattended --labels ${LABELS} --name ${HOSTNAME} --url "https://github.com/${ORG}" --token "${TOKEN}" --ephemeral --disableupdate --replace
 
 /actions-runner/run.sh
-#exec $@
