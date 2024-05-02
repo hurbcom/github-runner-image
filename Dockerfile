@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-ARG VERSION=2.306.0
+ARG VERSION=v2.316.1
 ENV GITHUB_ACCESS_TOKEN=
 ENV LABELS=
 ENV HOSTNAME=
@@ -11,7 +11,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt -f -y install `cat /tmp/requirements.apt` && \
     rm /tmp/requirements.apt
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
         apt-get install -y nodejs && \
         npm -g install yarn
 
